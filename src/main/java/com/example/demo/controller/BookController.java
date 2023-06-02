@@ -38,4 +38,25 @@ public class BookController {
         bookService.addBook(book);
         return "redirect:/books";
     }
+
+
+    @GetMapping("/edit/{id}")
+    public String editBookForm(@PathVariable("id") Long id, Model model){
+        Book book = bookService.getBookById(id);
+        model.addAttribute("book", book);
+        model.addAttribute("categories", categoryService.getAllCategories());
+        return "book/edit";
+    }
+
+    @PostMapping("/edit/{id}")
+    public String editBook(@PathVariable("id") Long id, @ModelAttribute("book") Book book) {
+        book.setId(id);
+        bookService.updateBook(book);
+        return "redirect:/books";
+    }
+    @GetMapping({"/delete/{id}"})
+    public String deleteBook(@PathVariable("id") Long id){
+            bookService.deleteBook(id);
+            return "redirect:/books";
+        }
 }
