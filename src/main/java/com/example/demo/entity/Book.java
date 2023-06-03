@@ -1,8 +1,14 @@
 package com.example.demo.entity;
 
+import com.example.demo.validator.annotation.ValidCategoryId;
+import com.example.demo.validator.annotation.ValidUserId;
 import jakarta.persistence.*;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
+import org.antlr.v4.runtime.misc.NotNull;
+import org.aspectj.bridge.IMessage;
 
 @Data
 @Entity
@@ -13,20 +19,25 @@ public class Book {
     private Long id;
 
     @Column(name = "title")
-
+    @NotEmpty(message = "Title must not be empty")
+    @Size(max = 50, min = 1, message = "Title must be less 50 characters")
     private String title;
 
     @Column(name = "author")
     private String author;
 
     @Column(name = "price")
-
     private Double price;
 
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
+    @ValidCategoryId
     private Category category;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ValidUserId
+    private User user;
     public Book(Long id, String title, String author, Double price, Category category) {
         this.id = id;
         this.title = title;
